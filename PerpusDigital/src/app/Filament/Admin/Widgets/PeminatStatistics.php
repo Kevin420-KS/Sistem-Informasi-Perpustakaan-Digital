@@ -16,24 +16,32 @@ class PeminatStatistics extends ChartWidget
 
         $labels = $data->pluck('jenis_buku')->toArray();
 
-        $laki = $data->pluck('laki_laki')->toArray();
-        $perempuan = $data->pluck('perempuan')->toArray();
-        $total = $data->pluck('total_pembaca')->toArray();
-
         return [
             'labels' => $labels,
             'datasets' => [
                 [
                     'label' => 'Laki-laki',
-                    'data' => $laki,
+                    'data' => $data->pluck('laki_laki')->toArray(),
+                    'borderColor' => '#60A5FA',
+                    'backgroundColor' => '#60A5FA',
+                    'fill' => false,
+                    'tension' => 0.4,
                 ],
                 [
                     'label' => 'Perempuan',
-                    'data' => $perempuan,
+                    'data' => $data->pluck('perempuan')->toArray(),
+                    'borderColor' => '#F472B6',
+                    'backgroundColor' => '#F472B6',
+                    'fill' => false,
+                    'tension' => 0.4,
                 ],
                 [
                     'label' => 'Total Pembaca',
-                    'data' => $total,
+                    'data' => $data->pluck('total_pembaca')->toArray(),
+                    'borderColor' => '#34D399',
+                    'backgroundColor' => '#34D399',
+                    'fill' => false,
+                    'tension' => 0.4,
                 ],
             ],
         ];

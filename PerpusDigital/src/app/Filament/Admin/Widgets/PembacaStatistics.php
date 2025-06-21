@@ -19,9 +19,15 @@ class PembacaStatistics extends ChartWidget
             ->get()
             ->groupBy('gender');
 
-        $labels = Pembaca::select('kelompok_usia')->distinct()->pluck('kelompok_usia')->toArray();
+        $labels = Pembaca::select('kelompok_usia')
+            ->distinct()
+            ->orderBy('kelompok_usia')
+            ->pluck('kelompok_usia')
+            ->toArray();
 
+        $colors = ['#F472B6', '#60A5FA'];
         $datasets = [];
+        $i = 0;
 
         foreach ($data as $gender => $grouped) {
             $counts = [];
@@ -32,7 +38,12 @@ class PembacaStatistics extends ChartWidget
             $datasets[] = [
                 'label' => $gender,
                 'data' => $counts,
+                'borderColor' => $colors[$i % count($colors)],
+                'backgroundColor' => $colors[$i % count($colors)],
+                'fill' => false,
+                'tension' => 0.4,
             ];
+            $i++;
         }
 
         return [

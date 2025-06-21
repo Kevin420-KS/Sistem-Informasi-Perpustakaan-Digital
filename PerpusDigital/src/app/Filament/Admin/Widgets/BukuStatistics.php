@@ -25,7 +25,9 @@ class BukuStatistics extends ChartWidget
             ->pluck('tahun_terbit')
             ->toArray();
 
+        $colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#14B8A6'];
         $datasets = [];
+        $i = 0;
 
         foreach ($data as $jenis => $grouped) {
             $counts = [];
@@ -36,7 +38,12 @@ class BukuStatistics extends ChartWidget
             $datasets[] = [
                 'label' => $jenis,
                 'data' => $counts,
+                'borderColor' => $colors[$i % count($colors)],
+                'backgroundColor' => $colors[$i % count($colors)],
+                'fill' => false,
+                'tension' => 0.4,
             ];
+            $i++;
         }
 
         return [
