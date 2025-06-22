@@ -23,22 +23,41 @@ class PeminatResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
+            Select::make('kelompok_usia')
+                ->required()
+                ->reactive()
+                ->afterStateUpdated(function ($state, callable $set) {
+                    // Set usia_min dan usia_max berdasarkan pilihan kelompok usia
+                    $ranges = [
+                        'Anak-anak' => [0, 9],
+                        'Praremaja' => [10, 12],
+                        'Remaja' => [13, 17],
+                        'Dewasa' => [18, 40],
+                    ];
+
+                    if (array_key_exists($state, $ranges)) {
+                        [$min, $max] = $ranges[$state];
+                        $set('usia_min', $min);
+                        $set('usia_max', $max);
+                    }
+                })
+                ->options([
+                    'Anak-anak' => 'Anak-anak : 0 – 9 tahun',
+                    'Praremaja' => 'Praremaja : 10 – 12 tahun',
+                    'Remaja' => 'Remaja : 13 – 17 tahun',
+                    'Dewasa' => 'Dewasa : 18 – 40 tahun',
+                ])
+                ->label('Kelompok Usia'),
+
             TextInput::make('usia_min')
                 ->numeric()
-                ->required(),
+                ->required()
+                ->readOnly(),
 
             TextInput::make('usia_max')
                 ->numeric()
-                ->required(),
-
-            Select::make('kelompok_usia')
                 ->required()
-                ->options([
-                    'Anak-anak' => 'Anak-anak',
-                    'Praremaja' => 'Praremaja',
-                    'Remaja' => 'Remaja',
-                    'Dewasa' => 'Dewasa',
-                ]),
+                ->readOnly(),
 
             TextInput::make('jenis_buku')
                 ->required(),
