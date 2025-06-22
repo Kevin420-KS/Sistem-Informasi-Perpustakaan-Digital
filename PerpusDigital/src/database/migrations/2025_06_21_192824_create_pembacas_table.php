@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('nama');
             $table->integer('usia');
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
-            $table->string('kelompok_usia');
+            $table->string('range_umur');
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ class Pembaca extends Model
         'nama',
         'usia',
         'gender',
-        'kelompok_usia',
+        'range_umur',
     ];
 
     protected static function booted()
@@ -23,18 +23,14 @@ class Pembaca extends Model
         static::saving(function ($pembaca) {
             $usia = $pembaca->usia;
 
-            if ($usia <= 12) {
-                $pembaca->kelompok_usia = '0-12';
+            if ($usia <= 9) {
+                $pembaca->range_umur = 'Anak-anak';
+            } elseif ($usia <= 12) {
+                $pembaca->range_umur = 'Praremaja';
             } elseif ($usia <= 17) {
-                $pembaca->kelompok_usia = '13-17';
-            } elseif ($usia <= 25) {
-                $pembaca->kelompok_usia = '18-25';
-            } elseif ($usia <= 35) {
-                $pembaca->kelompok_usia = '26-35';
-            } elseif ($usia <= 50) {
-                $pembaca->kelompok_usia = '36-50';
+                $pembaca->range_umur = 'Remaja';
             } else {
-                $pembaca->kelompok_usia = '51+';
+                $pembaca->range_umur = 'Dewasa';
             }
         });
     }
