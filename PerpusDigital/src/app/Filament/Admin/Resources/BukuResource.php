@@ -11,6 +11,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 
 class BukuResource extends Resource
 {
@@ -23,13 +26,33 @@ class BukuResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('judul')->required(),
-            TextInput::make('penulis')->required(),
-            TextInput::make('jenis_buku')->required(),
-            TextInput::make('tahun_terbit')->numeric()->required(),
-            TextInput::make('platform')->required(),
-            DatePicker::make('tanggal_rilis')->required(),
+            TextInput::make('judul')
+                ->label('Judul')
+                ->required(),
+
+            TextInput::make('penulis')
+                ->label('Penulis')
+                ->required(),
+
+            TextInput::make('jenis_buku')
+                ->label('Jenis Buku')
+                ->required(),
+
+            TextInput::make('tahun_terbit')
+                ->label('Tahun Terbit')
+                ->numeric()
+                ->required(),
+
+            TextInput::make('platform')
+                ->label('Platform')
+                ->required(),
+
+            DatePicker::make('tanggal_rilis')
+                ->label('Tanggal Rilis')
+                ->required(),
+
             Select::make('status_akses')
+                ->label('Status Akses')
                 ->required()
                 ->options([
                     'gratis' => 'Gratis',
@@ -40,21 +63,42 @@ class BukuResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
-                TextColumn::make('judul')->searchable()->sortable(),
-                TextColumn::make('penulis')->searchable()->sortable(),
-                TextColumn::make('jenis_buku'),
-                TextColumn::make('tahun_terbit'),
-                TextColumn::make('platform'),
-                TextColumn::make('tanggal_rilis')->date(),
-                TextColumn::make('status_akses'),
+        return $table
+            ->columns([
+                TextColumn::make('judul')
+                    ->label('Judul')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('penulis')
+                    ->label('Penulis')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('jenis_buku')
+                    ->label('Jenis Buku'),
+
+                TextColumn::make('tahun_terbit')
+                    ->label('Tahun Terbit'),
+
+                TextColumn::make('platform')
+                    ->label('Platform'),
+
+                TextColumn::make('tanggal_rilis')
+                    ->label('Tanggal Rilis')
+                    ->date(),
+
+                TextColumn::make('status_akses')
+                    ->label('Status Akses'),
             ])
-            ->filters([])
+            ->headerActions([
+                CreateAction::make(),
+            ])
             ->actions([
-                \Filament\Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                \Filament\Tables\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 

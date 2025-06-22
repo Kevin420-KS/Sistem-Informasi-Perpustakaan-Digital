@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -25,56 +26,33 @@ class PembacaResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('nama')
-                ->required()
-                ->label('Nama Lengkap'),
-
-            TextInput::make('usia')
-                ->numeric()
-                ->required()
-                ->label('Usia'),
-
-            Select::make('gender')
-                ->label('Jenis Kelamin')
-                ->options([
-                    'Laki-laki' => 'Laki-laki',
-                    'Perempuan' => 'Perempuan',
-                ])
-                ->required(),
-
-            Select::make('kelompok_usia')
-                ->label('Kelompok Usia')
-                ->options([
-                    'anak-anak' => 'anak-anak',
-                    'remaja' => 'remaja',
-                    'dewasa muda' => 'dewasa muda',
-                    'dewasa' => 'dewasa',
-                ])
-                ->required(),
+            TextInput::make('nama')->required()->label('Nama Lengkap'),
+            TextInput::make('usia')->numeric()->required()->label('Usia'),
+            Select::make('gender')->label('Jenis Kelamin')->options([
+                'Laki-laki' => 'Laki-laki',
+                'Perempuan' => 'Perempuan',
+            ])->required(),
+            Select::make('kelompok_usia')->label('Kelompok Usia')->options([
+                'anak-anak' => 'anak-anak',
+                'remaja' => 'remaja',
+                'dewasa muda' => 'dewasa muda',
+                'dewasa' => 'dewasa',
+            ])->required(),
         ]);
     }
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
-                TextColumn::make('nama')
-                    ->searchable()
-                    ->sortable()
-                    ->label('Nama'),
-
-                TextColumn::make('usia')
-                    ->searchable()
-                    ->label('Usia'),
-
-                TextColumn::make('gender')
-                    ->searchable()
-                    ->label('Jenis Kelamin'),
-
-                TextColumn::make('kelompok_usia')
-                    ->searchable()
-                    ->label('Kelompok Usia'),
+        return $table
+            ->columns([
+                TextColumn::make('nama')->searchable()->sortable()->label('Nama'),
+                TextColumn::make('usia')->searchable()->label('Usia'),
+                TextColumn::make('gender')->searchable()->label('Jenis Kelamin'),
+                TextColumn::make('kelompok_usia')->searchable()->label('Kelompok Usia'),
             ])
-            ->filters([])
+            ->headerActions([
+                CreateAction::make(),
+            ])
             ->actions([
                 EditAction::make(),
             ])

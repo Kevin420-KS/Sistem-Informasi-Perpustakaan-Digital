@@ -4,21 +4,18 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\PeminatResource\Pages;
 use App\Models\Peminat;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Model;
 
 class PeminatResource extends Resource
 {
     protected static ?string $model = Peminat::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
     protected static ?string $label = 'Peminat';
     protected static ?string $pluralLabel = 'Peminat';
     protected static ?string $navigationLabel = 'Peminat';
@@ -34,8 +31,14 @@ class PeminatResource extends Resource
                 ->numeric()
                 ->required(),
 
-            TextInput::make('kelompok_usia')
-                ->required(),
+            Select::make('kelompok_usia')
+                ->required()
+                ->options([
+                    'Anak-anak' => 'Anak-anak',
+                    'Praremaja' => 'Praremaja',
+                    'Remaja' => 'Remaja',
+                    'Dewasa' => 'Dewasa',
+                ]),
 
             TextInput::make('jenis_buku')
                 ->required(),
@@ -59,7 +62,7 @@ class PeminatResource extends Resource
             TextInput::make('total_pembaca')
                 ->numeric()
                 ->required()
-                ->readonly(), // penting: readonly agar tetap dikirim, tapi tidak bisa diedit
+                ->readonly(),
 
             Select::make('tingkat_minat')
                 ->required()
@@ -85,11 +88,11 @@ class PeminatResource extends Resource
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                \Filament\Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Tables\Actions\BulkActionGroup::make([
+                    \Filament\Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
