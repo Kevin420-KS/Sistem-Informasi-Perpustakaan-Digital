@@ -12,13 +12,13 @@ use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 
 class PeminatResource extends Resource
 {
     protected static ?string $model = Peminat::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
     protected static ?string $label = 'Peminat';
     protected static ?string $pluralLabel = 'Peminat';
     protected static ?string $navigationLabel = 'Peminat';
@@ -26,13 +26,41 @@ class PeminatResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('usia_min')->numeric()->required(),
-            TextInput::make('usia_max')->numeric()->required(),
-            TextInput::make('kelompok_usia')->required(),
-            TextInput::make('jenis_buku')->required(),
-            TextInput::make('laki_laki')->numeric()->required(),
-            TextInput::make('perempuan')->numeric()->required(),
-            TextInput::make('total_pembaca')->numeric()->required(),
+            TextInput::make('usia_min')
+                ->numeric()
+                ->required(),
+
+            TextInput::make('usia_max')
+                ->numeric()
+                ->required(),
+
+            TextInput::make('kelompok_usia')
+                ->required(),
+
+            TextInput::make('jenis_buku')
+                ->required(),
+
+            TextInput::make('laki_laki')
+                ->numeric()
+                ->required()
+                ->reactive()
+                ->afterStateUpdated(fn ($state, callable $set, callable $get) =>
+                    $set('total_pembaca', (int)$state + (int)$get('perempuan'))
+                ),
+
+            TextInput::make('perempuan')
+                ->numeric()
+                ->required()
+                ->reactive()
+                ->afterStateUpdated(fn ($state, callable $set, callable $get) =>
+                    $set('total_pembaca', (int)$get('laki_laki') + (int)$state)
+                ),
+
+            TextInput::make('total_pembaca')
+                ->numeric()
+                ->required()
+                ->readonly(), // penting: readonly agar tetap dikirim, tapi tidak bisa diedit
+
             Select::make('tingkat_minat')
                 ->required()
                 ->label('Tingkat Minat')

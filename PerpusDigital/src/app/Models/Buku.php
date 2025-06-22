@@ -18,6 +18,6 @@ class Buku extends Model
         'tahun_terbit',
         'platform',
         'tanggal_rilis',
-        'status_akses'
+        'status_akses',
     ];
 }

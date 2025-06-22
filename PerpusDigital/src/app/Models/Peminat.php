@@ -9,7 +9,7 @@ class Peminat extends Model
 {
     use HasFactory;
 
-    protected $table = 'peminat'; 
+    protected $table = 'peminat';
 
     protected $fillable = [
         'usia_min',
@@ -19,6 +19,6 @@ class Peminat extends Model
         'laki_laki',
         'perempuan',
         'total_pembaca',
-        'tingkat_minat'
+        'tingkat_minat',
     ];
 }

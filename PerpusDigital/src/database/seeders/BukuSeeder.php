@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Buku;
 use Illuminate\Database\Seeder;
+use App\Models\Buku;
 
 class BukuSeeder extends Seeder
 {

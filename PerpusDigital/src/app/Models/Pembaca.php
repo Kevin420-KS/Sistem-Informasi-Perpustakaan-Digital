@@ -9,7 +9,12 @@ class Pembaca extends Model
 {
     use HasFactory;
 
-    protected $table = 'pembaca'; 
+    protected $table = 'pembaca';
 
-    protected $fillable = ['nama', 'usia', 'gender', 'kelompok_usia'];
+    protected $fillable = [
+        'nama',
+        'usia',
+        'gender',
+        'kelompok_usia',
+    ];
 }
