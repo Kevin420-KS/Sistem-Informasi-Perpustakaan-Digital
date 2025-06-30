@@ -1,0 +1,70 @@
+@startuml
+start
+
+:Pengguna membuka sistem perpustakaan digital;
+:Login atau registrasi akun;
+
+if (Berhasil login?) then (Ya)
+  :Pilih akses e-book gratis;
+  :Tampilkan daftar e-book gratis;
+  :Pengguna memilih e-book;
+
+  :Sistem membuka beberapa halaman awal (preview);
+  if (Apakah pembaca tertarik melanjutkan?) then (Ya)
+    :Tampilkan notifikasi: "Lanjutkan baca dengan berlangganan";
+    
+    if (Pembaca bersedia membayar?) then (Ya)
+      :Arahkan ke halaman pembayaran;
+      :Berhasil berlangganan;
+      :Akses penuh ke seluruh isi e-book;
+    else (Tidak)
+      :Tampilkan opsi lain: baca e-book gratis lainnya;
+    endif
+
+  else (Tidak tertarik lanjut)
+    :Pengguna menutup buku atau kembali ke daftar e-book;
+  endif
+
+  :Sistem merekam interaksi & preferensi pengguna;
+
+else (Tidak)
+  :Tampilkan pesan kesalahan login;
+endif
+
+stop
+@enduml
+@startuml
+start
+
+:Pengguna membuka sistem perpustakaan digital;
+:Login atau registrasi akun;
+
+if (Berhasil login?) then (Ya)
+  :Pilih akses e-book gratis;
+  :Tampilkan daftar e-book gratis;
+  :Pengguna memilih e-book;
+
+  :Sistem membuka beberapa halaman awal (preview);
+  if (Apakah pembaca tertarik melanjutkan?) then (Ya)
+    :Tampilkan notifikasi: "Lanjutkan baca dengan berlangganan";
+    
+    if (Pembaca bersedia membayar?) then (Ya)
+      :Arahkan ke halaman pembayaran;
+      :Berhasil berlangganan;
+      :Akses penuh ke seluruh isi e-book;
+    else (Tidak)
+      :Tampilkan opsi lain: baca e-book gratis lainnya;
+    endif
+
+  else (Tidak tertarik lanjut)
+    :Pengguna menutup buku atau kembali ke daftar e-book;
+  endif
+
+  :Sistem merekam interaksi & preferensi pengguna;
+
+else (Tidak)
+  :Tampilkan pesan kesalahan login;
+endif
+
+stop
+@enduml

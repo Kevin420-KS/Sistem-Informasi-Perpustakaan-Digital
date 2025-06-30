@@ -1,0 +1,19 @@
+@startuml
+start
+
+:Admin Login ke Backend;
+
+if (Edit Data?\n(Buku / Pembaca / Peminat)) then (Ya)
+  :Update Statistik Otomatis;
+endif
+
+if (Ubah Bentuk Diagram Statistik?) then (Ya)
+  :Pilih & Ubah Bentuk Diagram;
+endif
+
+:Simpan Data;
+
+:Logout;
+
+stop
+@enduml
