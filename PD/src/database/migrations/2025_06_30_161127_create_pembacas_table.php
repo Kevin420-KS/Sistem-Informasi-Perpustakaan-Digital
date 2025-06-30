@@ -8,12 +8,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('pembaca', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->integer('usia');
-            $table->enum('gender', ['Laki-laki', 'Perempuan']);
-            $table->string('range_umur');
-            $table->timestamps();
+            $table->id(); // primary key
+            $table->string('nama'); // nama pembaca
+            $table->integer('usia'); // usia
+            $table->enum('gender', ['Laki-laki', 'Perempuan']); // jenis kelamin
+            $table->string('range_umur'); // kategori umur
+            $table->timestamps(); // created_at dan updated_at
         });
     }
 

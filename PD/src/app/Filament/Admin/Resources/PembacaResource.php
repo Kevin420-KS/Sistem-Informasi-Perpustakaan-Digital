@@ -14,21 +14,28 @@ use Filament\Forms\Components\Select;
 
 class PembacaResource extends Resource
 {
+    // Menghubungkan resource ini dengan model Pembaca
     protected static ?string $model = Pembaca::class;
 
+    // Ikon dan label navigasi di sidebar
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationLabel = 'Pembaca';
     protected static ?string $pluralModelLabel = 'Pembaca';
 
+    /**
+     * Form untuk create/edit Pembaca
+     */
     public static function form(Form $form): Form
     {
         return $form->schema([
+            // Nama pembaca
             TextInput::make('nama')->required()->maxLength(255),
 
+            // Usia, dengan deteksi rentang umur otomatis
             TextInput::make('usia')
                 ->numeric()
                 ->required()
-                ->live() // agar bisa trigger perubahan secara langsung
+                ->live()
                 ->afterStateUpdated(function ($state, callable $set) {
                     if ($state <= 9) {
                         $set('range_umur', 'Anak-anak');
@@ -43,17 +50,22 @@ class PembacaResource extends Resource
                     }
                 }),
 
+            // Pilihan gender
             Select::make('gender')->required()->options([
                 'Laki-laki' => 'Laki-laki',
                 'Perempuan' => 'Perempuan',
             ]),
 
+            // Otomatis, non-editable
             TextInput::make('range_umur')
                 ->disabled()
-                ->dehydrated(false),
+                ->dehydrated(false), // tidak dikirim saat form disubmit (karena akan ditentukan di model)
         ]);
     }
 
+    /**
+     * Tabel daftar pembaca
+     */
     public static function table(Table $table): Table
     {
         return $table

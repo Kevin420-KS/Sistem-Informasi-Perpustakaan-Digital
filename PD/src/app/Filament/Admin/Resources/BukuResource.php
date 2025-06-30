@@ -4,26 +4,36 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\BukuResource\Pages;
 use App\Models\Buku;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+
+// Komponen form
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Set;
+
+// Komponen tabel
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Forms\Set;
 
 class BukuResource extends Resource
 {
+    // Menghubungkan resource dengan model Buku
     protected static ?string $model = Buku::class;
+
+    // Konfigurasi sidebar admin
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $navigationLabel = 'Buku';
     protected static ?string $pluralModelLabel = 'Buku';
     protected static ?string $slug = 'buku';
 
+    /**
+     * Mendefinisikan form create & edit buku
+     */
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -31,6 +41,8 @@ class BukuResource extends Resource
             TextInput::make('penulis')->label('Penulis')->required(),
             TextInput::make('jenis_buku')->label('Jenis Buku')->required(),
             TextInput::make('tahun_terbit')->label('Tahun Terbit')->numeric()->required(),
+
+            // Dropdown platform yang otomatis mengatur status akses
             Select::make('platform')
                 ->label('Platform')
                 ->required()
@@ -48,7 +60,10 @@ class BukuResource extends Resource
                         $set('status_akses', null);
                     }
                 }),
+
             DatePicker::make('tanggal_rilis')->label('Tanggal Rilis')->required(),
+
+            // Input status akses otomatis (non-editable)
             TextInput::make('status_akses')
                 ->label('Status Akses')
                 ->required()
@@ -57,6 +72,9 @@ class BukuResource extends Resource
         ]);
     }
 
+    /**
+     * Mendefinisikan tabel daftar buku
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -74,6 +92,9 @@ class BukuResource extends Resource
             ->bulkActions([ DeleteBulkAction::make() ]);
     }
 
+    /**
+     * Mendefinisikan rute halaman untuk resource
+     */
     public static function getPages(): array
     {
         return [

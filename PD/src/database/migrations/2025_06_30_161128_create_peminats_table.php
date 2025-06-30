@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->integer('perempuan');
             $table->integer('total_pembaca');
             $table->string('tingkat_minat');
-            $table->timestamps();
+            $table->timestamps(); // created_at dan updated_at
         });
     }
 

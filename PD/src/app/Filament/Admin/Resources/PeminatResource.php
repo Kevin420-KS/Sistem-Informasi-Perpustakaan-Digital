@@ -13,8 +13,10 @@ use Filament\Tables\Columns\TextColumn;
 
 class PeminatResource extends Resource
 {
+    // Menentukan model yang digunakan
     protected static ?string $model = Peminat::class;
 
+    // Konfigurasi tampilan di sidebar Filament
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
     protected static ?string $label = 'Peminat';
     protected static ?string $pluralLabel = 'Peminat';
@@ -23,6 +25,7 @@ class PeminatResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
+            // Pilihan kelompok usia (memicu perubahan usia_min & usia_max)
             Select::make('kelompok_usia')
                 ->required()
                 ->reactive()
@@ -48,9 +51,14 @@ class PeminatResource extends Resource
                 ])
                 ->label('Kelompok Usia'),
 
+            // Batas usia minimum dan maksimum (otomatis)
             TextInput::make('usia_min')->numeric()->required()->readOnly(),
             TextInput::make('usia_max')->numeric()->required()->readOnly(),
+
+            // Jenis buku
             TextInput::make('jenis_buku')->required(),
+
+            // Jumlah pembaca laki-laki & perempuan
             TextInput::make('laki_laki')
                 ->numeric()
                 ->required()
@@ -65,11 +73,14 @@ class PeminatResource extends Resource
                 ->afterStateUpdated(fn ($state, callable $set, callable $get) =>
                     self::updatePembaca($set, $get, (int) $get('laki_laki'), (int) $state)
                 ),
+
+            // Total & tingkat minat (otomatis)
             TextInput::make('total_pembaca')->numeric()->required()->readOnly(),
             TextInput::make('tingkat_minat')->readOnly()->label('Tingkat Minat'),
         ]);
     }
 
+    // Fungsi untuk mengatur total dan tingkat minat
     private static function updatePembaca(callable $set, callable $get, int $laki, int $perempuan): void
     {
         $total = $laki + $perempuan;
@@ -86,6 +97,7 @@ class PeminatResource extends Resource
     {
         return $table
             ->columns([
+                // Kolom yang ditampilkan di tabel
                 TextColumn::make('kelompok_usia')
                     ->searchable()
                     ->sortable(query: function ($query, $direction) {
@@ -122,5 +134,5 @@ class PeminatResource extends Resource
             'create' => Pages\CreatePeminat::route('/create'),
             'edit' => Pages\EditPeminat::route('/{record}/edit'),
         ];
-    }
+    }  
 }

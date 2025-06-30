@@ -11,6 +11,7 @@ class Pembaca extends Model
 
     protected $table = 'pembaca';
 
+    // Field yang bisa diisi massal
     protected $fillable = [
         'nama',
         'usia',
@@ -18,6 +19,9 @@ class Pembaca extends Model
         'range_umur',
     ];
 
+    /**
+     * Mengatur range_umur secara otomatis setiap menyimpan data
+     */
     protected static function booted()
     {
         static::saving(function ($pembaca) {
@@ -32,7 +36,7 @@ class Pembaca extends Model
             } elseif ($usia >= 18 && $usia <= 40) {
                 $pembaca->range_umur = 'Dewasa';
             } else {
-                $pembaca->range_umur = 'Dewasa'; // fallback jika di atas 40
+                $pembaca->range_umur = 'Dewasa';
             }
         });
     }

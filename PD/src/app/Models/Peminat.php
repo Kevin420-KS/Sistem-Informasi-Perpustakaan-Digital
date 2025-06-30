@@ -9,8 +9,10 @@ class Peminat extends Model
 {
     use HasFactory;
 
+    // Nama tabel di database
     protected $table = 'peminat';
 
+    // Kolom yang dapat diisi secara massal
     protected $fillable = [
         'usia_min',
         'usia_max',

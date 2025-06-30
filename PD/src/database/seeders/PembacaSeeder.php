@@ -9,6 +9,7 @@ class PembacaSeeder extends Seeder
 {
     public function run(): void
     {
+        // Data pembaca untuk testing dan statistik
         $data = [
             ['nama' => 'Andi', 'usia' => 7, 'gender' => 'Laki-laki'],        // Anak-anak
             ['nama' => 'Sari', 'usia' => 10, 'gender' => 'Perempuan'],      // Praremaja
@@ -22,6 +23,7 @@ class PembacaSeeder extends Seeder
             ['nama' => 'Intan', 'usia' => 40, 'gender' => 'Perempuan'],     // Dewasa
         ];
 
+        // Simpan data ke database menggunakan create (agar trigger range_umur aktif)
         foreach ($data as $row) {
             Pembaca::create($row);
         }
