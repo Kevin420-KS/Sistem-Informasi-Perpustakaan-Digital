@@ -5,18 +5,18 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\PeminatResource\Pages;
 use App\Models\Peminat;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables\Table;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Resources\Resource;
+use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 
 class PeminatResource extends Resource
 {
-    // Menentukan model yang digunakan
     protected static ?string $model = Peminat::class;
 
-    // Konfigurasi tampilan di sidebar Filament
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
     protected static ?string $label = 'Peminat';
     protected static ?string $pluralLabel = 'Peminat';
@@ -25,11 +25,10 @@ class PeminatResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            // Pilihan kelompok usia (memicu perubahan usia_min & usia_max)
             Select::make('kelompok_usia')
                 ->required()
                 ->reactive()
-                ->afterStateUpdated(function ($state, callable $set) {
+                ->afterStateUpdated(function ($state, Set $set) {
                     $ranges = [
                         'Anak-anak' => [0, 9],
                         'Praremaja' => [10, 12],
@@ -41,6 +40,7 @@ class PeminatResource extends Resource
                         [$min, $max] = $ranges[$state];
                         $set('usia_min', $min);
                         $set('usia_max', $max);
+                        $set('jenis_buku', null); // reset pilihan jenis buku
                     }
                 })
                 ->options([
@@ -51,14 +51,46 @@ class PeminatResource extends Resource
                 ])
                 ->label('Kelompok Usia'),
 
-            // Batas usia minimum dan maksimum (otomatis)
             TextInput::make('usia_min')->numeric()->required()->readOnly(),
             TextInput::make('usia_max')->numeric()->required()->readOnly(),
 
-            // Jenis buku
-            TextInput::make('jenis_buku')->required(),
+            Select::make('jenis_buku')
+                ->required()
+                ->label('Jenis Buku')
+                ->options(function (Get $get) {
+                    return match ($get('kelompok_usia')) {
+                        'Anak-anak' => [
+                            'buku cerita bergambar' => 'Buku Cerita Bergambar',
+                            'buku interaktif' => 'Buku Interaktif',
+                            'buku edukasi dasar' => 'Buku Edukasi Dasar',
+                            'buku aktivitas' => 'Buku Aktivitas',
+                            'buku cerita religius anak' => 'Buku Cerita Religius Anak',
+                        ],
+                        'Praremaja' => [
+                            'novel fantasi ringan' => 'Novel Fantasi Ringan',
+                            'komik petualangan' => 'Komik Petualangan',
+                            'pengetahuan populer anak' => 'Pengetahuan Populer Anak',
+                            'kisah tokoh inspiratif anak' => 'Kisah Tokoh Inspiratif Anak',
+                            'buku aktivitas otak' => 'Buku Aktivitas Otak',
+                        ],
+                        'Remaja' => [
+                            'novel fiksi remaja' => 'Novel Fiksi Remaja',
+                            'komik remaja' => 'Komik Remaja',
+                            'fantasi dan sci-fi remaja' => 'Fantasi & Sci-fi Remaja',
+                            'self improvement remaja' => 'Self Improvement Remaja',
+                            'buku pendidikan sekolah' => 'Buku Pendidikan Sekolah',
+                        ],
+                        'Dewasa' => [
+                            'novel sastra dan fiksi umum' => 'Novel Sastra & Fiksi Umum',
+                            'self-help dan psikologi populer' => 'Self-Help & Psikologi Populer',
+                            'buku bisnis dan produktivitas' => 'Buku Bisnis & Produktivitas',
+                            'nonfiksi populer' => 'Nonfiksi Populer',
+                            'keagamaan dan spiritualitas' => 'Keagamaan & Spiritualitas',
+                        ],
+                        default => [],
+                    };
+                }),
 
-            // Jumlah pembaca laki-laki & perempuan
             TextInput::make('laki_laki')
                 ->numeric()
                 ->required()
@@ -66,6 +98,7 @@ class PeminatResource extends Resource
                 ->afterStateUpdated(fn ($state, callable $set, callable $get) =>
                     self::updatePembaca($set, $get, (int) $state, (int) $get('perempuan'))
                 ),
+
             TextInput::make('perempuan')
                 ->numeric()
                 ->required()
@@ -74,13 +107,11 @@ class PeminatResource extends Resource
                     self::updatePembaca($set, $get, (int) $get('laki_laki'), (int) $state)
                 ),
 
-            // Total & tingkat minat (otomatis)
             TextInput::make('total_pembaca')->numeric()->required()->readOnly(),
             TextInput::make('tingkat_minat')->readOnly()->label('Tingkat Minat'),
         ]);
     }
 
-    // Fungsi untuk mengatur total dan tingkat minat
     private static function updatePembaca(callable $set, callable $get, int $laki, int $perempuan): void
     {
         $total = $laki + $perempuan;
@@ -97,7 +128,6 @@ class PeminatResource extends Resource
     {
         return $table
             ->columns([
-                // Kolom yang ditampilkan di tabel
                 TextColumn::make('kelompok_usia')
                     ->searchable()
                     ->sortable(query: function ($query, $direction) {
@@ -134,5 +164,5 @@ class PeminatResource extends Resource
             'create' => Pages\CreatePeminat::route('/create'),
             'edit' => Pages\EditPeminat::route('/{record}/edit'),
         ];
-    }  
+    }
 }

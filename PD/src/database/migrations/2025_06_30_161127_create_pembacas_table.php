@@ -9,10 +9,12 @@ return new class extends Migration {
     {
         Schema::create('pembaca', function (Blueprint $table) {
             $table->id(); // primary key
-            $table->string('nama'); // nama pembaca
-            $table->integer('usia'); // usia
-            $table->enum('gender', ['Laki-laki', 'Perempuan']); // jenis kelamin
-            $table->string('range_umur'); // kategori umur
+            $table->string('nama');
+            $table->integer('usia');
+            $table->enum('gender', ['Laki-laki', 'Perempuan']);
+            $table->string('range_umur');
+            $table->enum('status', ['aktif', 'tidak aktif', 'keluar'])->default('aktif');
+            $table->date('tanggal_keluar')->nullable();
             $table->timestamps(); // created_at dan updated_at
         });
     }

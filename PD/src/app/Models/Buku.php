@@ -9,10 +9,8 @@ class Buku extends Model
 {
     use HasFactory;
 
-    // Menentukan tabel yang digunakan model ini
     protected $table = 'buku';
 
-    // Kolom yang dapat diisi secara massal (mass assignable)
     protected $fillable = [
         'judul',
         'penulis',
@@ -21,5 +19,6 @@ class Buku extends Model
         'platform',
         'tanggal_rilis',
         'status_akses',
+        'lembar_terjual', // ✅ Ditambahkan
     ];
 }
